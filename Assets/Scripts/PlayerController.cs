@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     public float dashForce;
     public bool canMove = true;
 
+    //mechanics 
+    public bool openDoor = false;
+
     //Components 
     private Rigidbody rb;
 
@@ -56,10 +59,13 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    public void OnCollisonEnter(Collider other){
-        if(other.gameObject.CompareTag("Perk")){
+    void OnTriggerEnter(Collider other){
+        Debug.Log(other.name);
+
+        if(other.CompareTag("Perk")){
             Destroy(other.gameObject);
-            Debug.Log(other.gameObject.tag);
+            openDoor = true; 
+            Debug.Log(openDoor);
         }
     }
 
