@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
+// using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,10 +8,8 @@ public class PlayerController : MonoBehaviour
 {
 
     //Input Management 
-    private float horizontalInput; 
     private float verticalInput;
     private bool jumpInput; 
-    // private float dashInput;
 
 
     //Speed
@@ -23,8 +21,9 @@ public class PlayerController : MonoBehaviour
     //mechanics 
     public bool openDoor = false;
 
-    //Components 
+    //Components and Game Objects
     private Rigidbody rb;
+    public GameObject focalPoint;
 
 
 
@@ -42,15 +41,17 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Movement(){
-        //Get input 
-        horizontalInput = Input.GetAxisRaw("Horizontal"); 
+        //Get input  
         verticalInput = Input.GetAxisRaw("Vertical");
         jumpInput = Input.GetKeyDown(KeyCode.Space);
 
-        //Move 
+        //Get forward direction of camera using focalPoint
+        Vector3 forwardDirection = focalPoint.transform.forward;
 
+        //Move 
         if(canMove){
-            rb.AddForce(horizontalInput * moveSpeed *Time.deltaTime, 0, verticalInput * moveSpeed * Time.deltaTime, ForceMode.Impulse);
+            //add force if player can move in camera direction 
+            rb.AddForce(forwardDirection * verticalInput * moveSpeed * Time.deltaTime, ForceMode.Impulse);
         }
 
         //Jump 
@@ -65,7 +66,7 @@ public class PlayerController : MonoBehaviour
         if(other.CompareTag("Perk")){
             Destroy(other.gameObject);
             openDoor = true; 
-            Debug.Log(openDoor);
+            Debug.Log("Congratulations, you have escaped!");
         }
     }
 
